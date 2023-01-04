@@ -2,12 +2,14 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "program that determines the difference between two data structures",
+  "type": "module",
   "main": "src/index.js",
   "bin": {
     "gendiff": "bin/gendiff.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint .",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -26,7 +28,7 @@
   },
   "devDependencies": {
     "eslint": "^8.31.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0"
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.1"
   }
 }

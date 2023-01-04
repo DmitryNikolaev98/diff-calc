@@ -1,11 +1,20 @@
 install:
-		npm ci
-lint:
-		npx eslint .
+	npm ci
+
 publish:
 	npm publish --dry-run
 
 gendiff:
 	node bin/gendiff
-	
-.PHONY: gendiff	
+
+lint:
+	npx eslint .
+
+test:
+	npx jest
+
+watch:
+	npx jest --watch
+
+test-coverage:
+	npx jest --coverage
