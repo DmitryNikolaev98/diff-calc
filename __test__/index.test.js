@@ -29,3 +29,4 @@ test('unknown extension', () => {
 test('wrong format', () => {
   expect(() => genDiff('__fixtures__/file1.json', '__fixtures__/file2.json', 'wrongFormat'))
     .toThrow('Unknown format - wrongFormat!');
+});
