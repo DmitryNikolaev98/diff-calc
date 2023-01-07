@@ -1,6 +1,7 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
+  "type": "module",
   "description": "program that determines the difference between two data structures",
   "bin": {
     "gendiff": "bin/gendiff.js"

@@ -6,6 +6,7 @@ const convert = (value) => {
   }
   return _.isString(value) ? `'${value}'` : value;
 };
+
 export default (data) => {
   const iter = (curentValue, ancestry) => {
     const lines = Object
