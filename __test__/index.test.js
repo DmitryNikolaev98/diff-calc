@@ -6,19 +6,26 @@ import genDiff from '../src/index.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
-describe('stylish', () => {
-  const result = fs.readFileSync(getFixturePath('result.stylish.txt'), 'utf8');
-  test('compare .ymls', () => expect(genDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'))).toBe(result));
-  test('compare .json', () => expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'))).toBe(result));
-});
-describe('plain', () => {
-  const result = fs.readFileSync(getFixturePath('result.plain.txt'), 'utf8');
-  test('compare .ymls', () => expect(genDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'), 'plain')).toBe(result));
-  test('compare .json', () => expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'plain')).toBe(result));
+
+describe.each([
+  ['stylish', 'result.stylish.txt'], [undefined, 'result.stylish.txt'],
+  ['plain', 'result.plain.txt'], ['json', 'result.json.txt'],
+])('format %s', (format, expected) => {
+  test.each([
+    ['json', 'json'], ['yaml', 'yaml'], ['yml', 'yml'],
+  ])('file extension %s', (extension1, extensoin2) => {
+    const file1 = getFixturePath(`file1.${extension1}`);
+    const file2 = getFixturePath(`file2.${extensoin2}`);
+    const result = fs.readFileSync(getFixturePath(expected), 'utf8');
+    expect(genDiff(file1, file2, format)).toEqual(result);
+  });
 });
 
-describe('json', () => {
-  const result = fs.readFileSync(getFixturePath('result.json.txt'), 'utf8');
-  test('compare .ymls', () => expect(genDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'), 'json')).toBe(result));
-  test('compare .json', () => expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'json')).toBe(result));
+test('unknown extension', () => {
+  expect(() => genDiff('__fixtures__/result.json.txt', '__fixtures__/result.json.txt'))
+    .toThrow('unknown extension txt');
 });
+
+test('wrong format', () => {
+  expect(() => genDiff('__fixtures__/file1.json', '__fixtures__/file2.json', 'wrongFormat'))
+    .toThrow('Unknown format - wrongFormat!');
