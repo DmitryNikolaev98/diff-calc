@@ -1,28 +1,30 @@
 import _ from 'lodash';
 
-const checkValue = (value) => {
-  if (_.isObject(value)) {
+const convert = (value) => {
+  if (_.isPlainObject(value)) {
     return '[complex value]';
   }
   return _.isString(value) ? `'${value}'` : value;
 };
-
 export default (data) => {
   const iter = (curentValue, ancestry) => {
     const lines = Object
       .entries(curentValue)
       .flatMap(([key, val]) => {
         const newKey = `${ancestry}.${key}`;
-        if (val.type === 'added') {
-          return `Property '${_.trimStart(newKey, '.')}' was added with value: ${checkValue(val.value)}`;
+        const tree = _.trimStart(newKey, '.');
+        switch (val.type) {
+          case 'added':
+            return `Property '${tree}' was added with value: ${convert(val.value)}`;
+          case 'deleted':
+            return `Property '${tree}' was removed`;
+          case 'changed':
+            return `Property '${tree}' was updated. From ${convert(val.value1)} to ${convert(val.value2)}`;
+          case 'nested':
+            return `${iter(val.children, newKey)}`;
+          default:
+            return [];
         }
-        if (val.type === 'deleted') {
-          return `Property '${_.trimStart(newKey, '.')}' was removed`;
-        }
-        if (val.type === 'nested') {
-          return `${iter(val.value, newKey)}`;
-        }
-        return val.type === 'changed' ? `Property '${_.trimStart(newKey, '.')}' was updated. From ${checkValue(val.value1)} to ${checkValue(val.value2)}` : [];
       }).join('\n');
     return lines;
   };
