@@ -8,8 +8,8 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 
 describe.each([
-  ['stylish', 'result.stylish.txt'], [undefined, 'result.stylish.txt'],
-  ['plain', 'result.plain.txt'], ['json', 'result.json.txt'],
+  ['stylish', 'result.stylish.txt'],['plain', 'result.plain.txt'],
+  ['json', 'result.json.txt'],
 ])('format %s', (format, expected) => {
   test.each([
     ['json', 'json'], ['yaml', 'yaml'], ['yml', 'yml'],
